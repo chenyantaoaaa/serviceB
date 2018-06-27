@@ -1,0 +1,19 @@
+#common config#
+spring:
+  application:
+    name: serviceB
+  cloud:
+    config:
+      enabled: false
+
+#网关端口#
+server:
+  port: 5012
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    enabled: true
+    service-url:
+      defaultZone: http://127.0.0.1:8660/eureka/
