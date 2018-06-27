@@ -2,18 +2,25 @@
 spring:
   application:
     name: serviceB
-  cloud:
-    config:
-      enabled: false
+#  cloud:
+#    config:
+#      enabled: false
+  rabbitmq:
+    host: 112.74.160.172
+    port: 5672
+    username: test
+    password: 123456
+    publisher-confirms: true
+    virtual-host: /
 
 #网关端口#
 server:
-  port: 5012
+  port: 5013
 
-eureka:
-  instance:
-    hostname: localhost
-  client:
-    enabled: true
-    service-url:
-      defaultZone: http://127.0.0.1:8660/eureka/
+#eureka:
+#  instance:
+#    hostname: localhost
+#  client:
+#    enabled: true
+#    service-url:
+#      defaultZone: http://127.0.0.1:8660/eureka/
