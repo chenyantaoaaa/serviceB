@@ -23,4 +23,16 @@ public class HelloController {
     public String helloworld(@PathVariable String name) {
         return helloSender.send(name);
     }
+
+    @RequestMapping("/sendMany")
+    public void oneToMany() throws Exception {
+        for (int i=0;i<100;i++){
+            helloSender.send(String.valueOf(i));
+        }
+    }
+
+    @RequestMapping("/fanoutSend")
+    public void fanoutSend() throws Exception {
+        helloSender.sendFanout();
+    }
 }

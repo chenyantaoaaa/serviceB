@@ -12,7 +12,9 @@ spring:
     password: 123456
     publisher-confirms: true
     virtual-host: /
-
+    listener:
+      simple:
+        acknowledge-mode: manual
 #网关端口#
 server:
   port: 5013

@@ -21,4 +21,10 @@ public class HelloSender {
         this.rabbitTemplate.convertAndSend("hello", context);
         return context;
     }
+
+    public void sendFanout() {
+        String context = "hi, fanout msg ";
+        System.out.println("Sender : " + context);
+        this.rabbitTemplate.convertAndSend("fanoutExchange","", context);
+    }
 }
