@@ -1,5 +1,6 @@
 package com.springcloud;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 @EnableAutoConfiguration
 //@EnableHystrix
+@MapperScan("com.springcloud.mapper")
 public class ServiceBApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ServiceBApplication.class, args);

@@ -37,10 +37,25 @@ spring:
       buffer-memory: 524288
       # 服务器地址
       bootstrap-servers: 112.74.160.172:9092
+#  datasource:
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    driver-class-name: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://112.74.160.172:3306/learn?useUnicode=true&characterEncoding=UTF-8
+#    username: root
+#    password: a86358201
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://47.91.77.217:3306/zzttravel?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: jg9n3gkzeKisJV7
 
 #网关端口#
 server:
   port: 5013
+
+#mybatis:
+#  config-location: classpath:com.springcloud.mapper/*.xml
 
 #eureka:
 #  instance:
