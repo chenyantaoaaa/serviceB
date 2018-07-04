@@ -30,20 +30,30 @@ public class KafkaController {
      * @param data 推送数据的data
      */
     private void send(String key, String data) {
-        kafkaTemplate.send("test", key, data);
+        kafkaTemplate.send("test0", key, data);
     }
 
     @RequestMapping("/kafka")
     public String testKafka() {
-        int iMax = 6;
+        int iMax = 10;
         for (int i = 1; i < iMax; i++) {
-            send("key" + i, "data" + i);
+            send("key1" , "data" + i);
         }
         return "success";
     }
 
-    @KafkaListener(topics = "test")
-    public void receive(ConsumerRecord<?, ?> consumer) {
-        System.out.println("topic="+consumer.topic()+"   key="+consumer.key()+"    valu="+consumer.value());
+    @KafkaListener(topics = "test0",groupId = "kafka2")
+    public void receive0(ConsumerRecord<?, ?> consumer) {
+        System.out.println("receive0 topic="+consumer.topic()+"   key="+consumer.key()+"    valu="+consumer.value());
     }
+
+    @KafkaListener(topics = "test0",groupId = "kafka3")
+    public void receive1(ConsumerRecord<?, ?> consumer) {
+        System.out.println("receive1 topic="+consumer.topic()+"   key="+consumer.key()+"    valu="+consumer.value());
+    }
+//
+//    @KafkaListener(topics = "test0",groupId = "kafka3")
+//    public void receive12(ConsumerRecord<?, ?> consumer) {
+//        System.out.println("receive2 topic="+consumer.topic()+"   key="+consumer.key()+"    valu="+consumer.value());
+//    }
 }
