@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 @EnableAutoConfiguration
 //@EnableHystrix
-@MapperScan("com.springcloud.mapper")
+@MapperScan("com.springcloud.splitTable.mapper")
 public class ServiceBApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ServiceBApplication.class, args);

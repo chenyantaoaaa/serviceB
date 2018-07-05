@@ -55,7 +55,7 @@ server:
   port: 5013
 
 #mybatis:
-#  config-location: classpath:com.springcloud.com.springcloud.mapper/*.xml
+#  config-location: classpath:com.springcloud.com.springcloud.splitTable.mapper/*.xml
 
 #eureka:
 #  instance:

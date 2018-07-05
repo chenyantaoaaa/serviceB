@@ -1,4 +1,4 @@
-package com.springcloud.pojo;
+package com.springcloud.splitTable.pojo;
 
 /**
  * Created by yantao.chen on 2018-07-05.

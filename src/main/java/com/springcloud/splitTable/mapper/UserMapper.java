@@ -1,6 +1,6 @@
-package com.springcloud.mapper;
+package com.springcloud.splitTable.mapper;
 
-import com.springcloud.pojo.User;
+import com.springcloud.splitTable.pojo.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

@@ -1,7 +1,7 @@
-package com.springcloud.controllers;
+package com.springcloud.splitTable.controllers;
 
-import com.springcloud.mapper.UserMapper;
-import com.springcloud.pojo.User;
+import com.springcloud.splitTable.mapper.UserMapper;
+import com.springcloud.splitTable.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
