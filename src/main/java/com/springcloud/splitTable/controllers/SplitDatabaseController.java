@@ -27,7 +27,6 @@ public class SplitDatabaseController {
 
     @RequestMapping(value = "addUser",method = RequestMethod.GET)
     public int addUser(int num){
-        System.out.println(123);
         User user = new User();
         long useridNum =Long.valueOf (System.currentTimeMillis()+""+Math.round(Math.random()*10000));
         String userid = String.valueOf(useridNum);
