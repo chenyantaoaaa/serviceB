@@ -1,7 +1,6 @@
 package com.springcloud.rabbitmq;
 
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 /**
@@ -9,7 +8,7 @@ import org.springframework.stereotype.Component;
  * 2018/6/28.
  */
 @Component
-@RabbitListener(queues = "fanout.B")
+//@RabbitListener(queues = "fanout.B")
 public class HelloReceiver2 {
     @RabbitHandler
     public void process(String hello) {

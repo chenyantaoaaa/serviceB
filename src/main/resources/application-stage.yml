@@ -1,0 +1,6 @@
+server:
+  port: 5014
+
+spring:
+  profiles:
+    active: stage

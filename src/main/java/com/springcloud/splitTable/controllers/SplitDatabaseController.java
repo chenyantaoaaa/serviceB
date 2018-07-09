@@ -2,8 +2,10 @@ package com.springcloud.splitTable.controllers;
 
 import com.springcloud.splitTable.mapper.UserMapper;
 import com.springcloud.splitTable.pojo.User;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -17,12 +19,13 @@ public class SplitDatabaseController {
     @Autowired
     private UserMapper userMapper;
 
-    @RequestMapping("getAllUsers")
+    @RequestMapping(value ="getAllUsers",method = RequestMethod.GET)
+    @ApiOperation(value="获取所有用户信息", notes="获取所有用户信息")
     public List<User> getAllUsers(){
         return userMapper.selectAll();
     }
 
-    @RequestMapping("addUser")
+    @RequestMapping(value = "addUser",method = RequestMethod.GET)
     public int addUser(int num){
         User user = new User();
         long useridNum =Long.valueOf (System.currentTimeMillis()+""+Math.round(Math.random()*10000));
@@ -37,7 +40,7 @@ public class SplitDatabaseController {
         return userMapper.addUser(user);
     }
 
-    @RequestMapping("getUser")
+    @RequestMapping(value = "getUser",method = RequestMethod.GET)
     public User addUser(String id){
         User user = new User();
         user.setUserid(id);
