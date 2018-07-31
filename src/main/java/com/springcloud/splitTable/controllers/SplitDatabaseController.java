@@ -4,6 +4,7 @@ import com.springcloud.splitTable.mapper.UserMapper;
 import com.springcloud.splitTable.pojo.User;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,7 @@ public class SplitDatabaseController {
 
     @RequestMapping(value ="getAllUsers",method = RequestMethod.GET)
     @ApiOperation(value="获取所有用户信息", notes="获取所有用户信息")
+    @CrossOrigin
     public List<User> getAllUsers(){
         return userMapper.selectAll();
     }
