@@ -1,17 +1,5 @@
 package com.springcloud.Others.ComplexExcel;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -19,65 +7,73 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 /**
  * Created by chenyantao
  * 2018/7/5.
  */
 public class ExcelOperateDemo {
-    public static void read(String value, Map<String,String> map) {
-//        String path = "C:\\Users\\chen\\Desktop\\test.xlsx";
-        String inPath = "src/main/resources/excelTmplate/test.xlsx";
-        String outPath = "src/main/resources/excelResult/test.xlsx";
+    public static void read(String inPath,String outPath,Map<String,String> map) {
         File file = new File(inPath);
+        boolean isExcel2003 = inPath.toLowerCase().endsWith(".xls");
         if (!file.exists())
             System.out.println("文件不存在");
         try {
-            XSSFWorkbook xssfWorkbook = new XSSFWorkbook(new FileInputStream(file));
-            XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(0);
-            int rowLength = xssfSheet.getLastRowNum()+1;
-            XSSFRow xssfRow = xssfSheet.getRow(0);
-            int colLength = xssfRow.getLastCellNum();
-            XSSFCell xssfCell = xssfRow.getCell(0);
-            CellStyle cellStyle = xssfCell.getCellStyle();
+            FileInputStream is = new FileInputStream(file);
+            Workbook wb = isExcel2003 ? new HSSFWorkbook(is) : new XSSFWorkbook(is);
+            Sheet sheet = wb.getSheetAt(0);
+            int rowLength = sheet.getLastRowNum()+1;
+            Row row = sheet.getRow(0);
+            int colLength = row.getLastCellNum();
+            Cell cell = row.getCell(0);
+            CellStyle cellStyle = cell.getCellStyle();
             Map<Integer,Integer> countMap = new HashMap<>();
             for (int i = 0; i < rowLength; i++) {
-                XSSFRow xssfRow1 = xssfSheet.getRow(i);
+                Row curRow = sheet.getRow(i);
                 int nonCount = 0;
                 for (int j = 0; j < colLength; j++) {
-                    XSSFCell xssfCell1 = xssfRow1.getCell(j);
-                    if (xssfCell1 != null) {
-                        xssfCell1.setCellType(CellType.STRING);
+                    Cell curCell = curRow.getCell(j);
+                    if (curCell != null) {
+                        curCell.setCellType(CellType.STRING);
                     }
-                    if(map.containsKey(xssfCell1.getStringCellValue())){
-                        xssfCell1.setCellValue(map.get(xssfCell1.getStringCellValue()));
-                        xssfCell1.setCellStyle(cellStyle);
-                    }else if(!map.containsKey(xssfCell1.getStringCellValue()) && xssfCell1.getStringCellValue().substring(0,1).equals("$")){
-                        xssfCell1.setCellValue("0");
-                        xssfCell1.setCellStyle(cellStyle);
+                    if(map.containsKey(curCell.getStringCellValue())){
+                        curCell.setCellValue(map.get(curCell.getStringCellValue()));
+                        curCell.setCellStyle(cellStyle);
+                    }else if(!map.containsKey(curCell.getStringCellValue()) && curCell.getStringCellValue().substring(0,1).equals("$")){
+                        curCell.setCellValue("0");
+                        curCell.setCellStyle(cellStyle);
                     }else {
                         nonCount++;
                     }
-                    System.out.print(xssfCell1.getStringCellValue() + "\t");
+                    System.out.print(curCell.getStringCellValue() + "\t");
                 }
                 countMap.put(i,nonCount);
                 System.out.println();
             }
             for (int i = 0; i < rowLength; i++) {
-                XSSFRow xssfRow2 = xssfSheet.getRow(i);
+                Row cutRow = sheet.getRow(i);
                 int rowCount = 0;
                 for (int j = 0; j < colLength; j++) {
-                    XSSFCell xssfCell2 = xssfRow2.getCell(j);
-                    if(!xssfCell2.getStringCellValue().equals("0")){
+                    Cell cutRowCell = cutRow.getCell(j);
+                    if(!cutRowCell.getStringCellValue().equals("0")){
                         rowCount++;
                     }
                 }
                 int nonCount = countMap.get(i);
                 if(rowCount == nonCount){
-                    xssfSheet.removeRow(xssfRow2);
+                    sheet.removeRow(cutRow);
                 }
             }
             FileOutputStream fileOut = new FileOutputStream(outPath);
-            xssfWorkbook.write(fileOut);
+            wb.write(fileOut);
             fileOut.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -86,12 +82,14 @@ public class ExcelOperateDemo {
     }
 
     public static void main(String[] args) {
+        String inPath = "src/main/resources/excelTmplate/test.xlsx";
+        String outPath = "src/main/resources/excelResult/test.xlsx";
         Map<String,String> map = new HashMap<>();
         map.put("$A1","replace_A1");
         map.put("$B2","replace_B2");
         map.put("$C3","replace_C3");
         map.put("$D4","replace_D4");
         map.put("$E5","replace_E5");
-        read(null,map);
+        read(inPath,outPath,map);
     }
 }
