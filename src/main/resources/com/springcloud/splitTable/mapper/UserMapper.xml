@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.springcloud.splitTable.mapper.UserMapper">
   <select id="selectAll"  resultType="com.springcloud.splitTable.pojo.User">
-    select name as name,
+    select userid,
+    name as name,
         age,
         sex
     from user0
@@ -15,7 +16,7 @@
     </insert>
     <select id="getUser" resultType="com.springcloud.splitTable.pojo.User" parameterType="com.springcloud.splitTable.pojo.User">
         select
-        userid,
+        userid as userid,
         name as name,
         age,
         sex

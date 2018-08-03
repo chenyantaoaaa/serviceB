@@ -9,16 +9,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.alibaba.druid.util.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.util.StringUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.alibaba.druid.util.StringUtils;
 
 /**
  * Created by chenyantao
@@ -35,13 +34,14 @@ public class ExcelOperateDemo {
             Workbook wb = isExcel2003 ? new HSSFWorkbook(is) : new XSSFWorkbook(is);
             Sheet sheet = wb.getSheetAt(0);
             int rowLength = sheet.getLastRowNum()+1;
-            Row row = sheet.getRow(0);
-            int colLength = row.getLastCellNum();
-            Cell cell = row.getCell(0);
-            CellStyle cellStyle = cell.getCellStyle();
+            //countMap用于记录每行拥有初始默认值的项
             Map<Integer,Integer> countMap = new HashMap<>();
             for (int i = 0; i < rowLength; i++) {
                 Row curRow = sheet.getRow(i);
+                if(curRow == null){
+                    continue;
+                }
+                int colLength = curRow.getLastCellNum();
                 int nonCount = 0;
                 for (int j = 0; j < colLength; j++) {
                     Cell curCell = curRow.getCell(j);
@@ -58,28 +58,18 @@ public class ExcelOperateDemo {
 
                     //找到$FOR标记代表需要循环赋值
                     if(curCellValue.length()>=4 && curCellValue.substring(0,4).equals("$FOR")){
-                        String key = curCellValue.substring(5,curCellValue.length());
-                        int curColumn = curCell.getColumnIndex();
-                        for (int k = 0; k < forList.size(); k++) {
-                            Map<String,String> forMap = forList.get(k);
-                            if(k == 0){
-                                curCell.setCellValue(forMap.get(key));
-                                curCell.setCellStyle(cellStyle);
-                            }else {
-                                Cell forCell = curRow.createCell(curColumn+k);
-                                forCell.setCellValue(forMap.get(key));
-                                forCell.setCellStyle(cellStyle);
-                            }
-                        }
+                        //根据for标记循环赋值
+                        assignForSign(curCellValue,curCell,forList,curRow);
                         continue;
                     }
                     if(map.containsKey(curCellValue)){
+                        //替换cell值
                         curCell.setCellValue(map.get(curCell.getStringCellValue()));
-                        curCell.setCellStyle(cellStyle);
                     }else if(!map.containsKey(curCellValue) && curCellValue.substring(0,1).equals("$")){
+                        //map中没有的占位符用0替换
                         curCell.setCellValue("0");
-                        curCell.setCellStyle(cellStyle);
                     }else {
+                        //其他位置认为是初始默认值
                         nonCount++;
                     }
                     System.out.print(curCell.getStringCellValue() + "\t");
@@ -89,7 +79,11 @@ public class ExcelOperateDemo {
             }
             for (int i = 0; i < rowLength; i++) {
                 Row cutRow = sheet.getRow(i);
+                if(cutRow == null){
+                    continue;
+                }
                 int rowCount = 0;
+                int colLength = cutRow.getLastCellNum();
                 for (int j = 0; j < colLength; j++) {
                     Cell cutRowCell = cutRow.getCell(j);
                     if (cutRowCell == null) {
@@ -100,12 +94,12 @@ public class ExcelOperateDemo {
                     if(StringUtils.isEmpty(curCellValue)){
                         continue;
                     }
-
                     if(!curCellValue.equals("0")){
                         rowCount++;
                     }
                 }
                 int nonCount = countMap.get(i);
+                //如果某行没有任何值被替换 则删除此行
                 if(rowCount == nonCount){
                     sheet.removeRow(cutRow);
                 }
@@ -117,6 +111,28 @@ public class ExcelOperateDemo {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * 根据for标记循环赋值
+     * @param curCellValue
+     * @param curCell 当前cell
+     * @param forList 循环list
+     * @param curRow 当前行
+     */
+    private static void assignForSign(String curCellValue,Cell curCell,List<Map<String,String>> forList,Row curRow) {
+        String key = curCellValue.substring(5,curCellValue.length());
+        int curColumn = curCell.getColumnIndex();
+        for (int k = 0; k < forList.size(); k++) {
+            Map<String,String> forMap = forList.get(k);
+            //默认找到for标记后就按照list长度循环添加cell
+            if(k == 0){
+                curCell.setCellValue(forMap.get(key));
+            }else {
+                Cell forCell = curRow.createCell(curColumn+k);
+                forCell.setCellValue(forMap.get(key));
+            }
+        }
     }
 
     public static void main(String[] args) {
