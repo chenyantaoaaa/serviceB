@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.springcloud.elasticSearch.pojo.EsBase;
+import com.springcloud.elasticSearch.pojo.Book;
 import com.springcloud.elasticSearch.service.BookService;
 
 /**
@@ -17,8 +17,8 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @RequestMapping("getInfo")
-    public String getInfo(@RequestBody EsBase esBase){
-        return bookService.getInfo(esBase);
+    @RequestMapping("getBookInfo")
+    public String getInfo(@RequestBody Book book){
+        return bookService.getInfo(book);
     }
 }

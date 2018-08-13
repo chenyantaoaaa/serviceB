@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.springcloud.elasticSearch.ESConstant;
-import com.springcloud.elasticSearch.pojo.EsBase;
+import com.springcloud.elasticSearch.pojo.Book;
+import com.springcloud.util.JsonUtils;
+import net.sf.json.JSONObject;
 
 /**
  * Created by yantao.chen on 2018-08-13.
@@ -15,10 +17,11 @@ public class BookService {
     @Autowired
     private RestTemplate restTemplate;
 
-    public String getInfo(EsBase esBase){
+    public String getInfo(Book book){
         StringBuffer queryUrl = new StringBuffer();
-        queryUrl.append(ESConstant.ES_URL+"/"+esBase.getIndex()+"/"+ esBase.getType()+"/_search");
-        String result = restTemplate.getForEntity(queryUrl.toString(),String.class).getBody();
+        queryUrl.append(ESConstant.ES_URL+"/"+book.getIndex()+"/"+ book.getType()+"/_search");
+        JSONObject query = JsonUtils.obj2EsParamsNoNull(book);
+        String result = restTemplate.postForEntity(queryUrl.toString(),query, String.class).getBody();
         return result;
     }
 }
