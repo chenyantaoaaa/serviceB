@@ -1,15 +1,16 @@
 package com.springcloud.splitTable.controllers;
 
-import com.springcloud.splitTable.mapper.UserMapper;
-import com.springcloud.splitTable.pojo.User;
-import io.swagger.annotations.ApiOperation;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.springcloud.splitTable.mapper.UserMapper;
+import com.springcloud.splitTable.pojo.User;
+import io.swagger.annotations.ApiOperation;
 
 /**
  * Created by yantao.chen on 2018-07-05.
@@ -49,6 +50,26 @@ public class SplitDatabaseController {
         long num = Long.valueOf(id);
         user.setTableNum("user"+String.valueOf(num%2));
         return userMapper.getUser(user);
+    }
+
+    @RequestMapping(value = "createTmpTable",method = RequestMethod.GET)
+    public void createTmpTable(){
+        userMapper.createTmpTable();
+    }
+
+    @RequestMapping(value = "testUpdateCost",method = RequestMethod.GET)
+    public void testUpdateCost(){
+        User user = new User();
+        user.setUserid("1");
+        user.setName("chen");
+        user.setSex(1);
+        long time1 = System.currentTimeMillis();
+        for (int i = 0; i < 1000; i++) {
+            user.setAge(i);
+            userMapper.testUpdateCost(user);
+        }
+        long time2 = System.currentTimeMillis();
+        System.out.println(time2-time1);
     }
 
 

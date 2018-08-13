@@ -1,5 +1,11 @@
 #common config#
 spring:
+  data:
+    elasticsearch:
+      cluster-nodes: 112.74.160.172:9300
+      cluster-name: chenes
+      repositories:
+        enabled: true
   application:
     name: serviceB
 #  cloud:
@@ -80,3 +86,8 @@ server:
 #    enabled: true
 #    service-url:
 #      defaultZone: http://127.0.0.1:8660/eureka/
+
+logging:
+  level:
+     com.springcloud: debug
+

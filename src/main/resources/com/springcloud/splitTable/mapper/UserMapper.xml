@@ -24,4 +24,11 @@
         WHERE
         userid = #{userid}
     </select>
+    <update id="createTmpTable">
+        CREATE TABLE tmp_user
+        SELECT * FROM user0 WHERE userid in (1,2)
+    </update>
+    <update id="testUpdateCost" parameterType="com.springcloud.splitTable.pojo.User">
+        update user0 SET age=#{age} WHERE userid=#{userid}
+    </update>
 </mapper>

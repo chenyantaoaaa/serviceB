@@ -1,9 +1,10 @@
 package com.springcloud.splitTable.mapper;
 
-import com.springcloud.splitTable.pojo.User;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import com.springcloud.splitTable.pojo.User;
 
 /**
  * Created by yantao.chen on 2018-07-05.
@@ -15,4 +16,8 @@ public interface UserMapper {
     int addUser(User user);
 
     User getUser(User user);
+
+    void createTmpTable();
+
+    int testUpdateCost(User user);
 }
