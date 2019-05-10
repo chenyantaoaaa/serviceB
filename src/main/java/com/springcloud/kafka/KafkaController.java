@@ -1,7 +1,9 @@
 package com.springcloud.kafka;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,18 +42,18 @@ public class KafkaController {
         return "success";
     }
 
-//    @KafkaListener(topics = "test0",groupId = "kafka2")
-//    public void receive0(ConsumerRecord<?, ?> consumer) {
-//        System.out.println("receive0 topic="+consumer.topic()+"   key="+consumer.key()+"    valu="+consumer.value());
-//    }
-//
-//    @KafkaListener(topics = "test0",groupId = "kafka3")
-//    public void receive1(ConsumerRecord<?, ?> consumer) {
-//        System.out.println("receive1 topic="+consumer.topic()+"   key="+consumer.key()+"    valu="+consumer.value());
-//    }
-//
-//    @KafkaListener(topics = "test0",groupId = "kafka3")
-//    public void receive12(ConsumerRecord<?, ?> consumer) {
-//        System.out.println("receive2 topic="+consumer.topic()+"   key="+consumer.key()+"    valu="+consumer.value());
-//    }
+    @KafkaListener(topics = "test0",groupId = "kafka2")
+    public void receive0(ConsumerRecord<?, ?> consumer) {
+        System.out.println("receive0 topic="+consumer.topic()+"   key="+consumer.key()+"    valu="+consumer.value() +" partition="+consumer.partition());
+    }
+
+    @KafkaListener(topics = "test0",groupId = "kafka3")
+    public void receive1(ConsumerRecord<?, ?> consumer) {
+        System.out.println("receive1 topic="+consumer.topic()+"   key="+consumer.key()+"    valu="+consumer.value() +" partition="+consumer.partition());
+    }
+
+    @KafkaListener(topics = "test0",groupId = "kafka3")
+    public void receive12(ConsumerRecord<?, ?> consumer) {
+        System.out.println("receive2 topic="+consumer.topic()+"   key="+consumer.key()+"    valu="+consumer.value() +" partition="+consumer.partition());
+    }
 }
